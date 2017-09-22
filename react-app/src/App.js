@@ -4,49 +4,28 @@ import ReactDOM from 'react-dom'
 class App extends React.Component {
   constructor(){
     super();
-    this.state = {val:0}
-    this.update = this.update.bind(this)
+    this.state = {increasing: false}
   }
   update(){
-    this.setState({val: this.state.val + 1})
+    ReactDOM.render(<App val={this.props.val + 1} />, document.getElementById('root'))
   }
-  //only ever fires once
-  componentWillMount(){
-    console.log('componentWillMount')
-    this.setState({m: 2})
+  componentWillReceiveProps(nextProps){
+    this.setState({increasing: nextProps.val > this.props.val})
+  }
+  // state is being changed. it is just not rendering. you can hit button 5 times to make it change
+  shouldComponentUpdate(nextProps,nextState){
+    return nextProps.val % 5 === 0;
   }
   render(){
-    console.log('render')
-    return <button onClick={this.update}>{this.state.val * this.state.m}</button>
+    console.log(this.state.increasing)
+    return <button onClick={this.update.bind(this)}>{this.props.val}</button>
 
   }
-  //fires when component mounted to DOM
-  componentDidMount(){
-    console.log('componentDidMount')
-    this.inc = setInterval(this.update,500)
-  }
-  componentWillUnmount(){
-    console.log('componentWillUnmount')
-    clearInterval(this.inc)
+  componentDidUpdate(prevProps, prevState) {
+    console.log(`prevProps: ${prevProps.val}`)
   }
 }
 
-class Wrapper extends React.Component {
-  mount(){
-    ReactDOM.render(<App />, document.getElementById('a'))
-  }
-  unmount(){
-    ReactDOM.unmountComponentAtNode(document.getElementById('a'))
-  }
-  render() {
-    return (
-      <div>
-        <button onClick={this.mount.bind(this)}>Mount</button>
-        <button onClick={this.unmount.bind(this)}>UnMount</button>
-        <div id="a"></div>
-      </div>
-    )
+App.defaultProps = {val: 0}
 
-  }
-}
-export default Wrapper
+export default App
