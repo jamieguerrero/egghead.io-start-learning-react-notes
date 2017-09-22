@@ -1,0 +1,97 @@
+###REndering Components
+// 3 different ways to create Component
+
+```
+class App extends React.Component {
+  //always have render method in component
+  render(){
+    // 1. return JSX.
+    // class is a reserved keyword. need to use className
+    // JSX element NEEDS to be wrapped in an enclosing tag
+    return <h1 className="thisisaclass">Wubbalubbadubdub</h1>
+    // 2. element type, props, innerHTML of element
+    // return React.createElement('h1', null , 'wubbalubbadubdub' )
+  }
+}
+
+//3. const App = () => <h1>Hi</h1>;
+```
+
+export default App
+
+
+### Passing props into components
+
+Can pass data into components using props
+
+txt is a prop here
+```
+//In component
+<App txt="This is a prop text" />
+
+
+//In index.js
+let txt = this.props.txt
+return {txt}
+
+```
+
+import React from 'react';
+
+class App extends React.Component {
+  render(){
+    let txt = this.props.txt
+    return <h1 className="thisisaclass">{txt}</h1>
+  }
+}
+
+App.propTypes = {
+  txt: React.PropTypes.string,
+  // cat is a required prop
+  cat: React.PropTypes.number.isRequired
+}
+
+App.defaultProps = {
+  txt: "this is the default txt"
+}
+
+export default App
+
+### Realtime input
+import React from 'react';
+
+class App extends React.Component {
+  constructor(){
+    //gives context
+    super();
+    this.state = {
+      txt: 'this is the state txt'
+    }
+  }
+
+  update( e ) {
+    this.setState({txt: e.target.value})
+  }
+
+  render(){
+    return (
+      <div>
+        <input type="text"
+        onChange={this.update.bind(this)}/>
+        <h1>{this.state.txt}</h1>
+      </div>
+    )
+  }
+}
+
+App.propTypes = {
+  txt: React.PropTypes.string,
+  // cat is a required prop
+  cat: React.PropTypes.number.isRequired
+}
+
+App.defaultProps = {
+  txt: "this is the default txt"
+}
+
+export default App
