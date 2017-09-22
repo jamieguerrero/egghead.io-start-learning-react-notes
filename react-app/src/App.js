@@ -8,7 +8,7 @@ class App extends React.Component {
   }
   update(){
     this.setState({
-      a: ReactDOM.findDOMNode(this.a).value,
+      a: this.a.refs.input.value,
       b: this.b.value
     })
   }
