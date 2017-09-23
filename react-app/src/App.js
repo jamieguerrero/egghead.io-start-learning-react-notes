@@ -1,45 +1,49 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import './App.css';
 
-// if we remove childB while render is:
-// render() {
-//   let items = this.props.children.map(child => child)
-//   console.log(items)
-//   return null
-// }
-// it will throw an error!
-
 class App extends React.Component {
+  constructor(){
+    super();
+    this.state = {
+      red: 0,
+      green: 0,
+      blue: 0
+    }
+    this.update = this.update.bind(this)
+  }
+  update(e){
+    this.setState({
+      red:ReactDOM.findDOMNode(this.refs.red.refs.inp).value,
+      green:ReactDOM.findDOMNode(this.refs.green.refs.inp).value,
+      blue:ReactDOM.findDOMNode(this.refs.blue.refs.inp).value,
+    })
+  }
   render(){
     return (
-      <Buttons>
-        <button value="A">A</button>
-        <button value="B">B</button>
-        <button value="C">C</button>
-      </Buttons>
+      <div>
+        <Slider ref="red" update={this.update} />
+        {this.state.red}
+        <br />
+        <Slider ref="green" update={this.update} />
+        {this.state.green}
+        <br />
+        <Slider ref="blue" update={this.update} />
+        {this.state.blue}
+        <br />
+      </div>
     )
   }
 }
 
-class Buttons extends React.Component {
-  constructor() {
-    super();
-    this.state = {selected: 'None'}
-  }
-
-  selectItem(selected){
-    this.setState({selected})
-  }
-
+class Slider extends React.Component {
   render(){
-    let fn = child =>
-      React.cloneElement(child, {
-        onClick: this.selectItem.bind(this, child.props.value)})
-    let items = React.Children.map(this.props.children, fn);
     return(
       <div>
-        <h2>You have Selected: {this.state.selected}</h2>
-        {items}
+        <input ref="inp" type="range"
+        min="0"
+        max="255"
+        onChange={this.props.update}/>
       </div>
     )
   }
