@@ -12,34 +12,36 @@ import './App.css';
 class App extends React.Component {
   render(){
     return (
-      <Parent>
-        <div className="childA"></div>
-        <div className="childB"></div>
-      </Parent>
+      <Buttons>
+        <button value="A">A</button>
+        <button value="B">B</button>
+        <button value="C">C</button>
+      </Buttons>
     )
   }
 }
 
-class Parent extends React.Component {
-  render() {
-    // let items = this.props.children.map(child => child)
+class Buttons extends React.Component {
+  constructor() {
+    super();
+    this.state = {selected: 'None'}
+  }
 
-    // React.Children.map takes two arguments
-    // let items = React.Children
-    //   .map(this.props.children, child => child)
+  selectItem(selected){
+    this.setState({selected})
+  }
 
-    // Can also use forEach
-    // let items = React.Children
-    //   .forEach(this.props.children, child => console.log(child.props.className))
-
-    // in this case, we can handle adjacent siblings with forArray
-    // React.Children.toArray(this.props.children)
-
-    // this returns single child, and if more than one returns error
-    React.Children.only(this.props.children)
-
-    console.log(items)
-    return null
+  render(){
+    let fn = child =>
+      React.cloneElement(child, {
+        onClick: this.selectItem.bind(this, child.props.value)})
+    let items = React.Children.map(this.props.children, fn);
+    return(
+      <div>
+        <h2>You have Selected: {this.state.selected}</h2>
+        {items}
+      </div>
+    )
   }
 }
 
